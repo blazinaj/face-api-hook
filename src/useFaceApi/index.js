@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import Webcam from "react-webcam";
-import {Button, Input, ListGroup, ListGroupItem} from "reactstrap";
+import {Button, Input, ListGroup, ListGroupItem, Spinner} from "reactstrap";
 
 const useFaceApi = (loadedModels, descriptors) => {
 
@@ -9,6 +9,13 @@ const useFaceApi = (loadedModels, descriptors) => {
     const [labeledDescriptors, setLabeledDescriptors] = useState([]);
     const [faceMatcher, setFaceMatcher] = useState(null);
     const [name, setName] = useState('');
+    const [modelsAreLoading, setModelsAreLoading] = useState(false);
+
+    useEffect(() => {
+        loadModels().then(() => {
+            setModelsAreLoading(true);
+        });
+    }, []);
 
     useEffect(() => {
         if (labeledDescriptors.length > 0) {
