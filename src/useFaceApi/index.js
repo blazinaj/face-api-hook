@@ -114,7 +114,7 @@ const useFaceApi = (loadedModels, descriptors) => {
         <ListGroup>
             {
                 labeledDescriptors.map((descriptor, index) =>
-                    <ListGroupItem>
+                    <ListGroupItem key={index}>
                         {descriptor.label}
                     </ListGroupItem>
                 )
@@ -132,6 +132,9 @@ const useFaceApi = (loadedModels, descriptors) => {
     ;
 
     const videoFeed =
+        modelsAreLoading ?
+            <Spinner />
+            :
             <Webcam
                 id="video-feed"
                 audio={false}
