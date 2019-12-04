@@ -1,13 +1,19 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import Webcam from "react-webcam";
-import { Button, Input, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Input, ListGroup, ListGroupItem, Spinner } from "reactstrap";
 
 const useFaceApi = (loadedModels, descriptors) => {
   const [image, setImage] = useState(null);
   const [labeledDescriptors, setLabeledDescriptors] = useState([]);
   const [faceMatcher, setFaceMatcher] = useState(null);
   const [name, setName] = useState('');
+  const [modelsAreLoading, setModelsAreLoading] = useState(false);
+  useEffect(() => {
+    loadModels().then(() => {
+      setModelsAreLoading(true);
+    });
+  }, []);
   useEffect(() => {
     if (labeledDescriptors.length > 0) {
       setFaceMatcher(new faceapi.FaceMatcher(labeledDescriptors));
@@ -71,7 +77,9 @@ const useFaceApi = (loadedModels, descriptors) => {
     return false;
   };
 
-  const descriptorList = React.createElement(ListGroup, null, labeledDescriptors.map((descriptor, index) => React.createElement(ListGroupItem, null, descriptor.label)));
+  const descriptorList = React.createElement(ListGroup, null, labeledDescriptors.map((descriptor, index) => React.createElement(ListGroupItem, {
+    key: index
+  }, descriptor.label)));
   const saveImageButton = React.createElement(React.Fragment, null, React.createElement(Input, {
     value: name,
     onChange: e => setName(e.target.value)
@@ -81,7 +89,7 @@ const useFaceApi = (loadedModels, descriptors) => {
   const checkForMatchButton = React.createElement(Button, {
     onClick: () => checkForMatch("video-feed")
   }, "Check For Match");
-  const videoFeed = React.createElement(Webcam, {
+  const videoFeed = modelsAreLoading ? React.createElement(Spinner, null) : React.createElement(Webcam, {
     id: "video-feed",
     audio: false,
     height: 400,

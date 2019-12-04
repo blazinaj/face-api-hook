@@ -1,6 +1,10 @@
 {
   "name": "face-api-hook",
-  "version": "0.1.7",
+  "version": "0.1.8",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blazinaj/face-api-hook.git"
+  },
   "private": false,
   "license": "(ISC OR GPL-3.0)",
   "main": "dist/useFaceApi.js",
